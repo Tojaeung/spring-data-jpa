@@ -1,6 +1,7 @@
 package com.tojaeung.datajpa.repository;
 
 import com.tojaeung.datajpa.domain.Member;
+import com.tojaeung.datajpa.domain.Team;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,8 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    TeamRepository teamRepository;
     @PersistenceContext
     EntityManager em;
 
@@ -95,5 +98,30 @@ class MemberRepositoryTest {
 
         // then
         assertThat(resultCount).isEqualTo(3);
+    }
+
+    @Test
+    public void EntityGraph실습() {
+        // given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member1", 10, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        // when
+        List<Member> members = memberRepository.findEntityGraphByusername("member1");
+
+        // then
+        for (Member member : members) {
+            System.out.println(member.getUsername());
+            System.out.println(member.getTeam().getClass());
+            System.out.println(member.getTeam().getName());
+
+        }
     }
 }
