@@ -124,4 +124,22 @@ class MemberRepositoryTest {
 
         }
     }
+
+    @Test
+    public void 힌트_락_테스트() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+        em.flush();
+
+
+        // then
+
+    }
 }
