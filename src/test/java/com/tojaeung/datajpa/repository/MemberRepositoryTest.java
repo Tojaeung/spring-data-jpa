@@ -142,4 +142,19 @@ class MemberRepositoryTest {
         // then
 
     }
+
+    @Test
+    public void Audit_테스트() throws Exception {
+        // given
+        Member member = new Member("member1", 10);
+        memberRepository.save(member);
+
+        // when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        // then
+        System.out.println(findMember.getCreatedDate());    // 생성날짜 자동생성
+        System.out.println(findMember.getLastModifiedData());   // 수정날짜 자동생성
+
+    }
 }
